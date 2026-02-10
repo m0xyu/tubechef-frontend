@@ -51,7 +51,7 @@ interface VideoBase {
   video_id: string;    // YouTube Video ID (e.g., dQw4w9WgXcQ)
   title: string;
   description: string | null;
-  thumbnail: string | null;
+  thumbnail_url: string | null;
   duration: number | null; // 秒数
   published_at: string;    // ISO8601 Date String
 }
@@ -63,7 +63,7 @@ interface VideoBase {
 export interface VideoPreview extends VideoBase {
   channel: {
     id: string;
-    title: string;
+    name: string;
   };
 }
 

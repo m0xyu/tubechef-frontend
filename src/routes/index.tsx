@@ -7,7 +7,7 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen y-12">
       <div className="container mx-auto px-4 text-center">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
           TubeChef
