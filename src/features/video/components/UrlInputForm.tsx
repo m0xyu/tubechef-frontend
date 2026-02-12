@@ -13,14 +13,28 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import axios from 'axios';
+import { VideoActionButton } from './VideoActionButton';
+import { useRecipePolling } from '@/hooks/useRecipePolling';
 
 export function UrlInputForm() {
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<VideoPreview | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const handlePreview = async (e: React.SubmitEvent) => {
+  const formatDuration = (seconds: number) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return [
+      h > 0 ? h : null,
+      m.toString().padStart(h > 0 ? 2 : 1, '0'),
+      s.toString().padStart(2, '0'),
+    ].filter(Boolean).join(':');
+  };
+
+  const handlePreview = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
@@ -39,20 +53,34 @@ export function UrlInputForm() {
       setIsLoading(false);
     }
   };
-  
-  const formatDuration = (seconds: number) => {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return [
-      h > 0 ? h : null,
-      m.toString().padStart(h > 0 ? 2 : 1, '0'),
-      s.toString().padStart(2, '0'),
-    ].filter(Boolean).join(':');
-  };
 
-  
+  const handleGenerate = async () => {
+    if (!preview) return;
+    setIsGenerating(true);
 
+    try {
+      const res = await apiClient.post<{ data: VideoPreview }>('/videos', { video_url: url });
+      setPreview(res.data.data);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || 'レシピの生成に失敗しました');
+      } else {
+        setError('予期せぬエラーが発生しました');
+      }
+    } finally {
+      setIsGenerating(false);
+    }
+  }
+
+  const { isPolling } = useRecipePolling({
+    initialVideo: preview,
+    onComplete: (updatedData) => {
+      setPreview((prev) => prev ? { ...prev, ...updatedData } : null);
+    }
+  });
+
+  console.log(preview);
+  
   return (
     <div className="max-w-2xl mx-auto">
       <form onSubmit={handlePreview} className="flex gap-2 mb-8">
@@ -84,14 +112,14 @@ export function UrlInputForm() {
       )}
 
       {/* スケルトン表示 */}
-      {isLoading && (
-        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-xl animate-pulse">
+     {isLoading && (
+        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-xl">
           <div className="md:flex">
             <Skeleton className="md:w-1/2 aspect-video" />
-            <div className="p-8 md:w-1/2 space-y-4">
-              <Skeleton className="h-6 rounded w-5/6" />
-              <Skeleton className="h-4 rounded w-full" />
-              <Skeleton className="h-12 rounded-xl w-full mt-auto" />
+            <div className="p-6 md:w-1/2 flex flex-col gap-4">
+              <Skeleton className="h-7 w-3/4 rounded-md" />
+              <Skeleton className="h-4 w-1/2 rounded-md" />
+              <Skeleton className="h-12 w-full rounded-xl mt-auto" />
             </div>
           </div>
         </div>
@@ -130,12 +158,12 @@ export function UrlInputForm() {
               </CardHeader>
               
               <CardFooter className="p-0 mt-auto">
-                <Button 
-                  className="w-full bg-slate-900 hover:bg-orange-600 text-white py-6 rounded-xl font-bold text-base shadow-lg transition-all active:scale-[0.98]"
-                  onClick={() => alert('レシピ生成開始！')}
-                >
-                  この動画からレシピを生成
-                </Button>
+                <VideoActionButton
+                  actionType={preview.action_type}
+                  recipeSlug={preview.recipe_slug}
+                  onGenerate={handleGenerate}
+                  isGenerating={isGenerating || isPolling}
+                />
               </CardFooter>
             </div>
           </div>

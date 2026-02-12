@@ -4,6 +4,7 @@
     "singleAttributePerLine": false,
     "htmlWhitespaceSensitivity": "css",
     "printWidth": 80,
+    "autoformatOnSave": true,
     "plugins": [
         "prettier-plugin-organize-imports",
         "prettier-plugin-tailwindcss"
