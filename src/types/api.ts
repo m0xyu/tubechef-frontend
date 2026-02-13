@@ -15,6 +15,18 @@ export const RECIPE_STATUS = {
   FAILED: 'failed',
 } as const;
 
+/**
+ * ビデオのUI切り替え用
+ */
+export type VideoActionType = 'view_recipe' | 'generate' | 'limit_exceeded';
+
+export const VIDEO_ACTION_TYPE = {
+  VIEW_RECIPE: 'view_recipe',
+  GENERATE: 'generate',
+  LIMIT_EXCEEDED: 'limit_exceeded',
+} as const;
+
+
 // ==========================================
 // Shared Components
 // ==========================================
@@ -54,6 +66,9 @@ interface VideoBase {
   thumbnail_url: string | null;
   duration: number | null; // 秒数
   published_at: string;    // ISO8601 Date String
+  recipe_slug: string|null;
+  recipe_generation_status: RecipeGenerationStatus;
+  recipe_generation_status_message: string|null;
 }
 
 /**
@@ -65,6 +80,7 @@ export interface VideoPreview extends VideoBase {
     id: string;
     name: string;
   };
+  action_type: VideoActionType;
 }
 
 /**
@@ -72,20 +88,14 @@ export interface VideoPreview extends VideoBase {
  * Backend: VideoResource
  */
 export interface VideoDetail extends VideoBase {
-  id: number;          // DB内部ID
+  id: number;
   is_saved: true;
   status: RecipeGenerationStatus;
-  fetched_at: string;
-  
-  // 保存後はリレーションから詳細なチャンネル情報が取れる
-  channel: Channel;
-
-  // 保存後は統計情報も取れる
-  statistics?: {
-    views: number | null;
-    likes: number | null;
-    comments: number | null;
-  };
+  channel: Channel; 
+  view_count: number | null;
+  like_count: number | null;
+  comment_count: number | null;
+  topic_categories: Array<string> | null
 }
 
 /**
