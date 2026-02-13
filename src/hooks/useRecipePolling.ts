@@ -12,19 +12,24 @@ interface UseRecipePollingProps {
 export const useRecipePolling = ({ initialVideo, onComplete }: UseRecipePollingProps) => {
   const [status, setStatus] = useState<PollingStatus>('idle');
   const [lastVideoId, setLastVideoId] = useState<string | null>(null);
+  const [lastGenerationStatus, setLastGenerationStatus] = useState<string | null>(null);
 
   const currentVideoId = initialVideo?.video_id || null;
-  if (currentVideoId !== lastVideoId) {
+  const currentGenerationStatus = initialVideo?.recipe_generation_status || null;
+  if (currentVideoId !== lastVideoId || currentGenerationStatus !== lastGenerationStatus) {
     setLastVideoId(currentVideoId);
-    if (initialVideo?.recipe_generation_status === 'processing') {
+    setLastGenerationStatus(currentGenerationStatus);
+    
+    // APIから 'processing' が返ってきたら、即座にポーリング状態にする
+    if (currentGenerationStatus === 'processing') {
       setStatus('processing');
-    } else {
+    } else if (status !== 'completed') {
+      // 完了済みでなければ idle に戻す
       setStatus('idle');
     }
   }
 
   const onCompleteRef = useRef(onComplete);
-  
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
