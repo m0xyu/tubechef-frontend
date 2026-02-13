@@ -122,7 +122,7 @@ export interface RecipeListItem {
   thumbnail_url: string | null;
   channel_name: string | null;
   cooking_time: string | null;
-  dish?: Dish; // 関連する料理カテゴリがあれば
+  dish: Dish;
 }
 
 /**
@@ -169,6 +169,16 @@ export interface RecipeDetail extends RecipeListItem {
   tips: Tip[];
 }
 
+export interface ApiMeta {
+  current_page: number;
+  from: number;
+  last_page: number;
+  path: string;
+  per_page: number;
+  to: number;
+  total: number;
+}
+
 // ==========================================
 // API Response Wrappers
 // ==========================================
@@ -185,13 +195,5 @@ export interface ApiResponse<T> {
     prev: string | null;
     next: string | null;
   };
-  meta?: {
-    current_page: number;
-    from: number;
-    last_page: number;
-    path: string;
-    per_page: number;
-    to: number;
-    total: number;
-  };
+  meta?: ApiMeta;
 }
