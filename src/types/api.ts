@@ -37,7 +37,7 @@ export const VIDEO_ACTION_TYPE = {
  */
 export interface Channel {
   id: string;          // YouTube Channel ID (e.g., UC...)
-  title: string;       // チャンネル名
+  name: string;       // チャンネル名
   custom_url?: string; // @handle
   thumbnail_url?: string;
 }
@@ -111,18 +111,21 @@ export interface VideoStatusResponse {
 // Recipe Types
 // ==========================================
 
-/**
- * レシピ一覧アイテム
- * Backend: RecipeListResource
- */
-export interface RecipeListItem {
+export interface RecipeBase {
   id: number;
   title: string;
   slug: string;
   thumbnail_url: string | null;
-  channel_name: string | null;
   cooking_time: string | null;
   dish: Dish;
+}
+
+/**
+ * レシピ一覧アイテム
+ * Backend: RecipeListResource
+ */
+export interface RecipeListItem extends RecipeBase {
+  channel_name: string | null;
 }
 
 /**
@@ -158,12 +161,11 @@ export interface Tip {
  * レシピ詳細（完全版）
  * Backend: RecipeResource
  */
-export interface RecipeDetail extends RecipeListItem {
+export interface RecipeDetail extends RecipeBase {
   summary: string | null;
   serving_size: string | null; // '2人前'
-  
-  // リレーション
-  video: VideoDetail; // 親動画の情報
+  channel: Channel;
+  video: VideoDetail;
   ingredients: Ingredient[];
   steps: Step[];
   tips: Tip[];
