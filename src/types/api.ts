@@ -199,3 +199,7 @@ export interface ApiResponse<T> {
   };
   meta?: ApiMeta;
 }
+
+export interface ValidationErrors {
+  [key: string]: string[];
+}

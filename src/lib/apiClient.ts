@@ -1,11 +1,12 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: '',
   
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
   },
 
   // Laravel Sanctumの認証クッキー(Session/XSRF)を自動送受信する設定

@@ -34,14 +34,14 @@ export function UrlInputForm() {
     ].filter(Boolean).join(':');
   };
 
-  const handlePreview = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePreview = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
     setPreview(null);
 
     try {
-      const res = await apiClient.post<{ data: VideoPreview }>('/videos/preview', { video_url: url });
+      const res = await apiClient.post<{ data: VideoPreview }>('/api/videos/preview', { video_url: url });
       setPreview(res.data.data);
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -59,7 +59,7 @@ export function UrlInputForm() {
     setIsGenerating(true);
 
     try {
-      const res = await apiClient.post<{ data: VideoPreview }>('/videos', { video_url: url });
+      const res = await apiClient.post<{ data: VideoPreview }>('/api/videos', { video_url: url });
       setPreview(res.data.data);
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -79,8 +79,6 @@ export function UrlInputForm() {
     }
   });
 
-  console.log(preview);
-  
   return (
     <div className="max-w-2xl mx-auto">
       <form onSubmit={handlePreview} className="flex gap-2 mb-8">

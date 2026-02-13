@@ -23,7 +23,7 @@ const navigate = useNavigate();
       setError(null);
       
       try {
-        const res = await apiClient.get<ApiResponse<RecipeListItem[]>>('/recipes', {
+        const res = await apiClient.get<ApiResponse<RecipeListItem[]>>('/api/recipes', {
           params: { page } 
         });
         
