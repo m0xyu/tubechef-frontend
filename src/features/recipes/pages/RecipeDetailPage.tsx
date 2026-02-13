@@ -20,7 +20,7 @@ export function RecipeDetailPage() {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const res = await apiClient.get<{ data: RecipeDetail }>(`/recipes/${recipeId}`);
+        const res = await apiClient.get<{ data: RecipeDetail }>(`/api/recipes/${recipeId}`);
         setRecipe(res.data.data);
       } catch (error) {
         console.error('Failed to fetch recipe', error);
