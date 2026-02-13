@@ -162,8 +162,7 @@ export interface RecipeDetail extends RecipeListItem {
   summary: string | null;
   serving_size: string | null; // '2人前'
   
-  // リレーション
-  video: VideoDetail; // 親動画の情報
+  video: VideoDetail;
   ingredients: Ingredient[];
   steps: Step[];
   tips: Tip[];
