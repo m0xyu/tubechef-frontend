@@ -9,6 +9,13 @@ interface UseRecipePollingProps {
   onComplete?: (updatedVideo: Partial<VideoPreview>) => void;
 }
 
+interface StatusResponse {
+  status: string;
+  action_type: string;
+  recipe_slug?: string;
+  error_message?: string;
+}
+
 export const useRecipePolling = ({ initialVideo, onComplete }: UseRecipePollingProps) => {
   const [status, setStatus] = useState<PollingStatus>('idle');
   const [lastVideoId, setLastVideoId] = useState<string | null>(null);
@@ -23,7 +30,7 @@ export const useRecipePolling = ({ initialVideo, onComplete }: UseRecipePollingP
     // APIから 'processing' が返ってきたら、即座にポーリング状態にする
     if (currentGenerationStatus === 'processing') {
       setStatus('processing');
-    } else if (status !== 'completed') {
+    } else if (status !== 'completed' && status !== 'failed') {
       // 完了済みでなければ idle に戻す
       setStatus('idle');
     }
@@ -49,12 +56,7 @@ export const useRecipePolling = ({ initialVideo, onComplete }: UseRecipePollingP
 
     intervalIdRef.current = setInterval(async () => {
       try {
-        const res = await apiClient.get<{ 
-            status: string; 
-            action_type: string; 
-            recipe_slug?: string 
-        }>(`/videos/${videoId}/status`);
-
+        const res = await apiClient.get<StatusResponse>(`/api/videos/${videoId}/status`);
         const data = res.data;
 
         if (data.status === 'completed') {

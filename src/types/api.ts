@@ -18,10 +18,11 @@ export const RECIPE_STATUS = {
 /**
  * ビデオのUI切り替え用
  */
-export type VideoActionType = 'view_recipe' | 'generate' | 'limit_exceeded';
+export type VideoActionType = 'view_recipe' | 'processing' | 'generate' | 'limit_exceeded';
 
 export const VIDEO_ACTION_TYPE = {
   VIEW_RECIPE: 'view_recipe',
+  PROCESSING: 'processing',
   GENERATE: 'generate',
   LIMIT_EXCEEDED: 'limit_exceeded',
 } as const;
@@ -80,6 +81,7 @@ export interface VideoPreview extends VideoBase {
     id: string;
     name: string;
   };
+  video_url: string;
   action_type: VideoActionType;
 }
 
