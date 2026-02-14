@@ -82,7 +82,19 @@ export function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link to="/recipes" search={{ page: 1 }} className="cursor-pointer">
-                    📖 マイシピ
+                    📖 レシピ一覧
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/library" className="cursor-pointer">
+                    生成したレシピ
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/history" className="cursor-pointer">
+                    閲覧履歴
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

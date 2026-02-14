@@ -1,19 +1,21 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from '@tanstack/react-router';
 import { apiClient } from '@/lib/apiClient';
-import type { RecipeDetail, Ingredient } from '@/types/api';
+import type { RecipeDetail, Ingredient, RecipeListItem } from '@/types/api';
 import { RecipePlayer, type RecipePlayerRef } from '../components/RecipePlayer';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FaClock, FaUserFriends, FaPlay, FaLightbulb, FaExternalLinkAlt } from 'react-icons/fa';
 import { FaCompress, FaExpand } from 'react-icons/fa';
+import { useHistory } from '@/features/history/hooks/useHistory';
 
 export function RecipeDetailPage() {
   const { recipeId } = useParams({ from: '/recipes/$recipeId' });
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMiniPlayer, setIsMiniPlayer] = useState(false);
+  const { addToHistory } = useHistory();
   
   const playerRef = useRef<RecipePlayerRef>(null);
 
@@ -30,6 +32,21 @@ export function RecipeDetailPage() {
     };
     fetchRecipe();
   }, [recipeId]);
+
+  useEffect(() => {
+    if (!recipe) return;
+
+    addToHistory({
+      id: recipe.id,
+      slug: recipe.slug,
+      title: recipe.title,
+      channel_name: recipe.channel.name, 
+      thumbnail_url: recipe.video.thumbnail_url,
+      cooking_time: recipe.cooking_time,
+      dish: recipe.dish,
+    } as RecipeListItem);
+    
+  }, [recipe, addToHistory]);
 
   // 時間フォーマット関数 (秒 -> mm:ss)
   const formatTime = (seconds: number) => {

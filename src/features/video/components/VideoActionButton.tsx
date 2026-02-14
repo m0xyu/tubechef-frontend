@@ -18,11 +18,9 @@ export const VideoActionButton = ({
 
   // 共通のボタンスタイル（Tailwind）
   const baseButtonClass = "w-full py-4 rounded-xl font-bold text-base shadow-lg transition-all flex items-center justify-center gap-2";
+  const showProcessing = isGenerating || actionType === 'processing';
 
   switch (actionType) {
-    /* ------------------------------------------------
-       CASE 1: レシピを見る (TanStack Router Link)
-    ------------------------------------------------ */
     case 'view_recipe':
       if (!recipeSlug) return null;
 
@@ -36,17 +34,15 @@ export const VideoActionButton = ({
         </Link>
       );
 
-    /* ------------------------------------------------
-       CASE 2: 生成する (通常ボタン)
-    ------------------------------------------------ */
     case 'generate':
+    case 'processing':
       return (
         <button
           onClick={onGenerate}
-          disabled={isGenerating}
+          disabled={showProcessing}
           className={`${baseButtonClass} bg-slate-900 text-white hover:bg-slate-800 active:scale-[0.98] disabled:opacity-70 disabled:cursor-wait`}
         >
-          {isGenerating ? (
+          {showProcessing ? (
             <>
               <span className="animate-spin">⏳</span> 生成中...
             </>
@@ -56,9 +52,6 @@ export const VideoActionButton = ({
         </button>
       );
 
-    /* ------------------------------------------------
-       CASE 3: 上限到達 (無効化ボタン)
-    ------------------------------------------------ */
     case 'limit_exceeded':
       return (
         <div className="w-full space-y-2">
