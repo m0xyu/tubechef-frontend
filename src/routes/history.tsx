@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useHistory } from '@/features/history/hooks/useHistory';
 import { RecipeCard } from '@/features/recipes/components/RecipeCard';
 
-export const Route = createFileRoute('/_authenticated/history')({
+export const Route = createFileRoute('/history')({
   component: HistoryPage,
 });
 
@@ -22,7 +22,7 @@ function HistoryPage() {
             <FaClock className="text-xl" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">閲覧履歴</h1>
+            <h1 className="text-2xl font-bold text-gray-900">最近見たレシピ</h1>
             <p className="text-sm text-gray-500">最近チェックした動画（ブラウザに保存されています）</p>
           </div>
         </div>

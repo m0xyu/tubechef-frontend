@@ -1,13 +1,28 @@
-import { useState } from 'react';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { useEffect, useRef, useState } from 'react';
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { FaSpinner } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
+import { z } from 'zod';
+import { toast } from 'sonner';
+
+const loginSearchSchema = z.object({
+  redirect: z.string().optional(),
+  error: z.string().optional(),
+});
 
 export const Route = createFileRoute('/login')({
+  validateSearch: (search) => loginSearchSchema.parse(search),
+  beforeLoad: ({ context }) => {
+    if (context.auth.user) {
+      throw redirect({
+        to: '/',
+      });
+    }
+  },
   component: LoginPage,
 });
 
@@ -17,17 +32,42 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const search = Route.useSearch();
+  const navigate = useNavigate();
+  const toastShownRef = useRef(false);
+
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
       await login({ email, password });
+
+      await navigate({ 
+        to: search.redirect || '/',
+        replace: true // 履歴に残さない
+      });
     } catch {
-      // エラーハンドリング
+      toast.error("ログインに失敗しました");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (search.error === 'unauthorized' && !toastShownRef.current) {
+      toast.error("ログインが必要です", {
+        description: "このページにアクセスするにはログインしてください。",
+        duration: 4000,
+      });
+      toastShownRef.current = true;
+
+      navigate({
+        from: Route.fullPath,
+        search: (prev) => ({ ...prev, error: undefined }),
+        replace: true,
+      });
+    }
+  }, [search.error, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-[80vh] px-4">
