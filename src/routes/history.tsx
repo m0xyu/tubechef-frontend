@@ -10,7 +10,6 @@ export const Route = createFileRoute('/history')({
 
 function HistoryPage() {
   const { history, isLoaded, removeFromHistory, clearHistory } = useHistory();
-  console.log(history);
   if (!isLoaded) return null;
 
   return (
@@ -18,7 +17,7 @@ function HistoryPage() {
       {/* ヘッダーエリア */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-blue-100 rounded-xl text-blue-600">
+          <div className="p-3 bg-orange-100 rounded-xl text-orange-600">
             <FaClock className="text-xl" />
           </div>
           <div>

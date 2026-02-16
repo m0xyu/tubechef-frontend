@@ -16,7 +16,7 @@ export const Route = createFileRoute('/recipes/')({
 function RecipesPageIndex() {
   const search = Route.useSearch()
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="flex items-center gap-3 mb-8">
         <div className="p-3 bg-orange-100 rounded-xl text-orange-600">
           <FaUtensils className="text-xl" />

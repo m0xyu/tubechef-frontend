@@ -10,7 +10,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { FaSignOutAlt, FaUtensils } from 'react-icons/fa';
+import { 
+  FaSignOutAlt, 
+  FaUtensils, 
+  FaHistory, 
+  FaCog,
+  FaClock
+} from 'react-icons/fa';
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -86,20 +92,30 @@ export function Header() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/recipes" search={{ page: 1 }} className="cursor-pointer">
-                    📖 レシピ一覧
+                  <Link to="/recipes" search={{ page: 1 }} className="cursor-pointer flex items-center">
+                    <FaUtensils className="mr-2 h-4 w-4 text-orange-500" />
+                    レシピ一覧
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/library" className="cursor-pointer">
+                  <Link to="/library" className="cursor-pointer flex items-center">
+                    <FaHistory className="mr-2 h-4 w-4 text-orange-500" />
                     生成したレシピ
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/history" className="cursor-pointer">
+                  <Link to="/history" className="cursor-pointer flex items-center">
+                    <FaClock className="mr-2 h-4 w-4 text-orange-500" />
                     最近見たレシピ
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/settings" className="cursor-pointer flex items-center">
+                    <FaCog className="mr-2 h-4 w-4 text-orange-500" />
+                    設定
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

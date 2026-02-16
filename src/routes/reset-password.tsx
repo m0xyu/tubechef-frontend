@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { apiClient } from '@/lib/apiClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,7 @@ import { FaSpinner } from 'react-icons/fa';
 import axios from 'axios';
 import { z } from 'zod';
 import type { ValidationErrors } from '@/types/api';
+import { toast } from 'sonner';
 
 // URLクエリパラメータのバリデーション定義
 const resetPasswordSearchSchema = z.object({
@@ -18,6 +19,13 @@ const resetPasswordSearchSchema = z.object({
 
 export const Route = createFileRoute('/reset-password')({
   validateSearch: (search) => resetPasswordSearchSchema.parse(search),
+  beforeLoad: ({ context }) => {
+      if (context.auth.user) {
+        throw redirect({
+          to: '/',
+        });
+      }
+    },
   component: ResetPasswordPage,
 });
 
@@ -45,7 +53,9 @@ function ResetPasswordPage() {
         password_confirmation: passwordConfirmation,
       });
 
-      alert('パスワードを再設定しました。新しいパスワードでログインしてください。');
+      toast.success('パスワードを再設定しました', {
+        description: '新しいパスワードでログインしてください。'
+      });
       navigate({ to: '/login' });
 
     } catch (e: unknown) {

@@ -24,6 +24,7 @@ export interface RegisterRequest {
 
 export interface AuthContextType {
   user: User | null;
+  updateUser: () => Promise<void>;
   login: (data: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
   logout: () => Promise<void>;
@@ -55,6 +56,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
     fetchUser();
   }, []);
+
+  const updateUser = async () => {
+    try {
+      const res = await apiClient.get('/api/user');
+      setUser(res.data);
+    } catch {
+      setUser(null);
+    }
+  };
 
   const login = async (data: LoginRequest) => {
     setErrors(null);
@@ -94,7 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext value={{ user, login, register, logout, isLoading, errors }}>
+    <AuthContext value={{ user, updateUser, login, register, logout, isLoading, errors }}>
       {children}
     </AuthContext>
   );

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
 import { apiClient } from '@/lib/apiClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,13 @@ import { FaSpinner, FaCheckCircle } from 'react-icons/fa';
 import axios from 'axios';
 
 export const Route = createFileRoute('/forgot-password')({
+  beforeLoad: ({ context }) => {
+        if (context.auth.user) {
+          throw redirect({
+            to: '/',
+          });
+        }
+      },
   component: ForgotPasswordPage,
 });
 
@@ -27,8 +34,7 @@ function ForgotPasswordPage() {
     try {
       await apiClient.get('/sanctum/csrf-cookie'); // CSRF保護
       const res = await apiClient.post('/forgot-password', { email });
-      // Laravelは成功時 { status: "We have emailed your password reset link!" } を返す
-      setStatus(res.data.status);
+      setStatus(res.data.message || res.data.status || 'Success');
     } catch (e: unknown) {
       if (axios.isAxiosError(e) && e.response?.status === 422) {
         setError(e.response.data.errors.email?.[0] || 'メール送信に失敗しました');

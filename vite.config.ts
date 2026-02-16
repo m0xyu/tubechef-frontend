@@ -74,15 +74,13 @@ export default defineConfig({
                     return null; 
                 }
             },
-            '/email/verification-notification': {
+            '/user/profile-information': {
                 target: 'http://localhost:80',
                 changeOrigin: true,
-                bypass: (req) => {
-                    if (req.method === 'GET') {
-                        return req.url 
-                    }
-                    return null; 
-                }
+            },
+            '/user/password': {
+                target: 'http://localhost:80',
+                changeOrigin: true,
             },
 		},
 	},

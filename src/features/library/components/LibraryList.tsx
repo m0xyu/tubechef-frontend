@@ -22,7 +22,7 @@ export const LibraryList = ({
   // 初回ロード中
   if (isLoading && videos.length === 0) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(6)].map((_, i) => (
           <VideoCardSkeleton key={i} />
         ))}
@@ -32,7 +32,7 @@ export const LibraryList = ({
 
   // 動画リスト表示
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {videos.map((video) => (
         <div key={video.video_id} className="relative group">
           <VideoCard
