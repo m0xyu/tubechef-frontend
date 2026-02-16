@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,13 @@ import { FaSpinner } from 'react-icons/fa';
 
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
+  beforeLoad: ({ context }) => {
+      if (context.auth.user) {
+        throw redirect({
+          to: '/',
+        });
+      }
+    },
 });
 
 function RegisterPage() {
@@ -18,8 +25,9 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
@@ -28,6 +36,11 @@ function RegisterPage() {
         email,
         password,
         password_confirmation: passwordConfirmation,
+      });
+
+      await navigate({ 
+        to: '/',
+        replace: true // 履歴に残さない
       });
     } catch {
       // エラーハンドリング

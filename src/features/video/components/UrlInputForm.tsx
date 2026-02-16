@@ -63,13 +63,13 @@ export function UrlInputForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <form onSubmit={handlePreview} className="flex gap-2 mb-8">
+      <form onSubmit={handlePreview} className="flex gap-2">
         <Input
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="YouTubeのURLを貼り付け"
-          className={`flex-1 h-12 border-gray-200 rounded-xl transition-all duration-200 ${
+          className={`flex-1 h-12 border-gray-200 rounded-xl transition-all duration-200 bg-white ${
             error 
               ? 'border-red-500 focus-visible:ring-red-500 shadow-[0_0_0_2px_rgba(239,68,68,0.1)]' 
               : 'focus-visible:ring-orange-500 focus-visible:border-orange-500'
@@ -86,14 +86,14 @@ export function UrlInputForm() {
       </form>
 
       {error && (
-        <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6">
+        <div className="bg-red-50 text-red-600 p-4 rounded-lg mt-6">
           {error}
         </div>
       )}
 
       {/* スケルトン表示 */}
      {isLoading && (
-        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-xl mt-6">
           <div className="md:flex">
             <Skeleton className="md:w-1/2 aspect-video" />
             <div className="p-6 md:w-1/2 flex flex-col gap-4">
@@ -107,11 +107,13 @@ export function UrlInputForm() {
 
       {/* プレビュー表示 */}
       {preview && (
-        <VideoCard
-          video={preview}
-          onGenerate={handleGenerate}
-          isGenerating={isGenerating || isPolling}
-        />
+        <div className='mt-6'>
+          <VideoCard
+            video={preview}
+            onGenerate={handleGenerate}
+            isGenerating={isGenerating || isPolling}
+          />
+        </div>
       )}
     </div>
   );

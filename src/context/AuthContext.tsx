@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { apiClient } from '@/lib/apiClient';
-import { useNavigate } from '@tanstack/react-router';
 import axios from 'axios';
 import type { ValidationErrors } from '@/types/api';
 
@@ -23,7 +22,7 @@ export interface RegisterRequest {
   password_confirmation: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   login: (data: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
@@ -38,7 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [errors, setErrors] = useState<ValidationErrors | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
 
   // CSRFトークンを取得してからリクエストを送るヘルパー
   const csrf = () => apiClient.get('/sanctum/csrf-cookie');
@@ -65,7 +63,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await apiClient.post('/login', data);
       const res = await apiClient.get('/api/user');
       setUser(res.data);
-      navigate({ to: '/' });
     } catch (e: unknown) {
       if (axios.isAxiosError(e) && e.response?.status === 422) {
         const responseData = e.response.data as { errors: ValidationErrors };
@@ -82,7 +79,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await apiClient.post('/register', data);
       const res = await apiClient.get('/api/user');
       setUser(res.data);
-      navigate({ to: '/' });
     } catch (e: unknown) {
       if (axios.isAxiosError(e) && e.response?.status === 422) {
         const responseData = e.response.data as { errors: ValidationErrors };
@@ -95,7 +91,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     await apiClient.post('/logout');
     setUser(null);
-    navigate({ to: '/login' });
   };
 
   return (

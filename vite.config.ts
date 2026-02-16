@@ -23,6 +23,12 @@ export default defineConfig({
 			'/login': {
                 target: 'http://localhost:80',
                 changeOrigin: true,
+                bypass: (req) => {
+                    if (req.method === 'GET') {
+                        return req.url 
+                    }
+                    return null; 
+                }
             },
             '/logout': {
                 target: 'http://localhost:80',
@@ -31,22 +37,52 @@ export default defineConfig({
             '/register': {
                 target: 'http://localhost:80',
                 changeOrigin: true,
+                bypass: (req) => {
+                    if (req.method === 'GET') {
+                        return req.url 
+                    }
+                    return null; 
+                }
             },
             '/forgot-password': {
                 target: 'http://localhost:80',
                 changeOrigin: true,
+                bypass: (req) => {
+                    if (req.method === 'GET') {
+                        return req.url 
+                    }
+                    return null; 
+                }
             },
             '/reset-password': {
                 target: 'http://localhost:80',
                 changeOrigin: true,
+                bypass: (req) => {
+                    if (req.method === 'GET') {
+                        return req.url 
+                    }
+                    return null; 
+                }
             },
             '/user/confirmed-password-status': {
                 target: 'http://localhost:80',
                 changeOrigin: true,
+                bypass: (req) => {
+                    if (req.method === 'GET') {
+                        return req.url 
+                    }
+                    return null; 
+                }
             },
             '/email/verification-notification': {
                 target: 'http://localhost:80',
                 changeOrigin: true,
+                bypass: (req) => {
+                    if (req.method === 'GET') {
+                        return req.url 
+                    }
+                    return null; 
+                }
             },
 		},
 	},

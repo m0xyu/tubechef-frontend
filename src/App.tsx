@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { routeTree } from './routeTree.gen'
+import { useAuth } from './context/AuthContext'
+import { FaSpinner } from 'react-icons/fa'
 
-function App() {
-  const [count, setCount] = useState(0)
+const router = createRouter({
+  routeTree,
+  context: {
+    auth: undefined!,
+  },
+})
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
 }
 
-export default App
+
+function AppInner() {
+  const auth = useAuth();
+
+  if (auth.isLoading) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center bg-orange-50/30">
+        <FaSpinner className="h-10 w-10 animate-spin text-orange-500" />
+        <p className="mt-4 text-sm font-medium text-orange-800/60">
+          TubeChefを準備中...
+        </p>
+      </div>
+    );
+  }
+
+  // チェックが終わったらルーターを表示。context に auth を渡すのを忘れずに。
+  return <RouterProvider router={router} context={{ auth }} />;
+}
+
+export default function App() {
+  return (
+      <AppInner />
+  );
+}

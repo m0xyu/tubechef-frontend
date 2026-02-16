@@ -52,10 +52,15 @@ export function Header() {
             >
               レシピ一覧
             </Link>
+            <Link 
+              to="/history" 
+              className="text-gray-600 hover:text-orange-600 [&.active]:text-orange-600 [&.active]:font-bold transition-colors"
+            >
+              最近見たレシピ
+            </Link>
           </nav>
         </div>
 
-        {/* 右側: 認証状態に応じたアクション */}
         <div className="flex items-center gap-4">
           {user ? (
             // ログイン時: ユーザーメニュー
@@ -94,7 +99,7 @@ export function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link to="/history" className="cursor-pointer">
-                    閲覧履歴
+                    最近見たレシピ
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
