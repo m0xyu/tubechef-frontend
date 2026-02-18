@@ -68,6 +68,7 @@ export const VideoCard = ({
                   recipeSlug={video.recipe_slug}
                   onGenerate={onGenerate}
                   isGenerating={isGenerating}
+                  generationErrorMessage={video.recipe_generation_error_message}
                 />
               </CardFooter>
             </div>

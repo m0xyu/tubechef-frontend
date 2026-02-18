@@ -6,7 +6,7 @@ import { RecipePlayer, type RecipePlayerRef } from '../components/RecipePlayer';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { FaClock, FaUserFriends, FaPlay, FaLightbulb, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaClock, FaUserFriends, FaPlay, FaLightbulb, FaExternalLinkAlt, FaYoutube } from 'react-icons/fa';
 import { FaCompress, FaExpand } from 'react-icons/fa';
 import { useHistory } from '@/features/history/hooks/useHistory';
 
@@ -16,6 +16,8 @@ export function RecipeDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMiniPlayer, setIsMiniPlayer] = useState(false);
   const { addToHistory } = useHistory();
+
+  const channelURL = `https://www.youtube.com/${recipe?.video.channel.custom_url}`
   
   const playerRef = useRef<RecipePlayerRef>(null);
 
@@ -70,7 +72,7 @@ export function RecipeDetailPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">{recipe.title}</h1>
         <div className="flex flex-wrap gap-4 text-sm text-gray-500 items-center">
-          <span className="bg-gray-100 px-2 py-1 rounded">📺 {recipe.channel.name}</span>
+          <a href={channelURL} target='_blank' className="flex items-center gap-1 px-2 py-1 rounded"><FaYoutube className='text-red-500' /> {recipe.channel.name}</a>
           {recipe.cooking_time && <span className="flex items-center gap-1"><FaClock /> {recipe.cooking_time}</span>}
           {recipe.serving_size && <span className="flex items-center gap-1"><FaUserFriends /> {recipe.serving_size}</span>}
         </div>

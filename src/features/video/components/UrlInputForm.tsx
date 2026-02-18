@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import axios from 'axios';
 import { useRecipePolling } from '@/features/recipes/hooks/useRecipePolling';
 import { VideoCard } from './VideoCard';
+import { Link } from '@tanstack/react-router';
 
 export function UrlInputForm() {
   const [url, setUrl] = useState('');
@@ -61,6 +62,10 @@ export function UrlInputForm() {
     }
   });
 
+  const showProcessing = isGenerating || preview?.action_type === 'processing';
+
+  console.log(preview);
+  
   return (
     <div className="max-w-2xl mx-auto">
       <form onSubmit={handlePreview} className="flex gap-2">
@@ -113,6 +118,21 @@ export function UrlInputForm() {
             onGenerate={handleGenerate}
             isGenerating={isGenerating || isPolling}
           />
+          {showProcessing && (
+            <div className="mt-4 p-4 rounded-xl bg-orange-50/80 border border-orange-100 animate-in fade-in slide-in-from-top-2">
+              <div className="gap-3 text-center">
+                <div className="space-y-1">
+                  <p className="text-sm font-bold text-orange-800">
+                    レシピを生成しています
+                  </p>
+                  <p className="text-xs leading-relaxed">
+                    完了まであと1分ほどお待ちください。
+                    <Link to='/library' className='underline font-bold text-orange-500'>生成したレシピ</Link>から確認できます。
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

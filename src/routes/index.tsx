@@ -90,7 +90,7 @@ function Index() {
           </div>
 
           {isLoadingPublic ? (
-             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(3)].map((_, i) => (
                   <div key={i} className="flex flex-col space-y-3">
                     <Skeleton className="h-50 w-full rounded-xl" />
@@ -102,7 +102,7 @@ function Index() {
                 ))}
               </div>
           ) : recentRecipes.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {recentRecipes.map(recipe => (
                 <div key={recipe.slug} className="transition-transform hover:-translate-y-1 duration-300">
                   <RecipeCard recipe={recipe} />
@@ -130,7 +130,7 @@ function Index() {
           </div>
 
           {recentHistory.length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {recentHistory.map(recipe => (
                  <div key={recipe.slug} className="transition-transform hover:-translate-y-1 duration-300">
                     <RecipeCard recipe={recipe} />

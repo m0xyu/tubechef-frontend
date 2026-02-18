@@ -18,7 +18,7 @@ export const RECIPE_STATUS = {
 /**
  * ビデオのUI切り替え用
  */
-export type VideoActionType = 'view_recipe' | 'processing' | 'generate' | 'limit_exceeded';
+export type VideoActionType = 'view_recipe' | 'processing' | 'generate' | 'retry' | 'limit_exceeded';
 
 export const VIDEO_ACTION_TYPE = {
   VIEW_RECIPE: 'view_recipe',
@@ -69,7 +69,7 @@ interface VideoBase {
   published_at: string;    // ISO8601 Date String
   recipe_slug: string|null;
   recipe_generation_status: RecipeGenerationStatus;
-  recipe_generation_status_message: string|null;
+  recipe_generation_error_message: string|null;
 }
 
 /**
