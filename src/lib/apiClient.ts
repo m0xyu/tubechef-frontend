@@ -11,6 +11,7 @@ const apiClient = axios.create({
 
   // Laravel Sanctumの認証クッキー(Session/XSRF)を自動送受信する設定
   withCredentials: true,
+  withXSRFToken: true,
 });
 
 
