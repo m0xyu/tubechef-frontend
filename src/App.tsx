@@ -8,6 +8,7 @@ const router = createRouter({
   context: {
     auth: undefined!,
   },
+  scrollRestoration: true,
 })
 
 declare module '@tanstack/react-router' {
