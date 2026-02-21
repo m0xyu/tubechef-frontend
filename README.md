@@ -3,6 +3,8 @@
 YouTube動画からAI（Gemini API）を活用してレシピを自動生成するサービス「TubeChef」のフロントエンドリポジトリです。
 本プロジェクトはバックエンド（Laravel）の技術検証およびAPI連携を主眼として開発されています。
 
+バックエンド: [https://github.com/m0xyu/tubechef](https://github.com/m0xyu/tubechef)
+
 ## 📌 プロジェクトの概要
 YouTubeのURLを入力するだけで、AIが動画内容を解析し、以下の情報を自動抽出・生成します。
 - **調理工程の構造化**: 動画のタイムスタンプと連動したステップ解説
