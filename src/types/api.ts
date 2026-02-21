@@ -24,6 +24,7 @@ export const VIDEO_ACTION_TYPE = {
   VIEW_RECIPE: 'view_recipe',
   PROCESSING: 'processing',
   GENERATE: 'generate',
+  RETRY: 'retry',
   LIMIT_EXCEEDED: 'limit_exceeded',
 } as const;
 
@@ -124,7 +125,6 @@ export interface RecipeBase {
 
 /**
  * レシピ一覧アイテム
- * Backend: RecipeListResource
  */
 export interface RecipeListItem extends RecipeBase {
   channel_name: string | null;
@@ -141,27 +141,28 @@ export interface Ingredient {
 }
 
 /**
- * 調理手順
- */
-export interface Step {
-  step_number: number;
-  description: string;
-  start_time_in_seconds: number | null; // YouTube再生位置用
-  end_time_in_seconds: number | null;
-}
-
-/**
  * コツ・ポイント
  */
 export interface Tip {
   description: string;
-  related_step_number: number | null;
+  related_step: number | null;
   start_time_in_seconds: number | null;
 }
 
 /**
+ * 調理手順
+ */
+export interface Step {
+  id: number;
+  step_number: number;
+  description: string;
+  start_time_in_seconds: number | null; // YouTube再生位置用
+  end_time_in_seconds: number | null;
+  tips: Tip[];
+}
+
+/**
  * レシピ詳細（完全版）
- * Backend: RecipeResource
  */
 export interface RecipeDetail extends RecipeBase {
   summary: string | null;
