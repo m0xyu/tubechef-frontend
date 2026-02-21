@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# TubeChef (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+YouTube動画からAI（Gemini API）を活用してレシピを自動生成するサービス「TubeChef」のフロントエンドリポジトリです。
+本プロジェクトはバックエンド（Laravel）の技術検証およびAPI連携を主眼として開発されています。
 
-Currently, two official plugins are available:
+バックエンド: [https://github.com/m0xyu/tubechef](https://github.com/m0xyu/tubechef)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 プロジェクトの概要
+YouTubeのURLを入力するだけで、AIが動画内容を解析し、以下の情報を自動抽出・生成します。
+- **調理工程の構造化**: 動画のタイムスタンプと連動したステップ解説
+- **シェフのコツ（Tips）**: 各工程およびレシピ全体に対する補足情報の生成
+- **動画連動再生**: 手順ごとの再生ボタンにより、特定のシーンを即座に確認可能
 
-## React Compiler
+## 🛠 技術スタック
+バックエンドとの疎通および、複雑な型定義（Recipe/Step/Tip）の整合性を重視した構成です。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework**: React (Vite)
+- **Routing**: TanStack Router
+- **UI Components**: shadcn/ui, Tailwind CSS
+- **API Client**: Axios (認証トークン管理・インターセプター実装)
+- **Icon**: React Icons
 
-## Expanding the ESLint configuration
+## 🔧 セットアップ（開発用）
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# 依存関係のインストール
+npm install
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# 環境変数の設定
+cp .env.example .env
+# ※ VITE_API_BASE_URL にバックエンドのURLを設定
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 開発サーバーの起動
+npm run dev
 ```
