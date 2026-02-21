@@ -64,6 +64,8 @@ export function RecipeDetailPage() {
     return acc;
   }, {} as Record<string, Ingredient[]>) || {};
 
+  const generalTips = recipe?.tips.filter(tip => tip.related_step === null) || [];
+
   if (isLoading) return <DetailSkeleton />;
   if (!recipe) return <div>Recipe not found</div>;
 
@@ -178,38 +180,58 @@ export function RecipeDetailPage() {
             </div>
           )}
 
-          <section>
-            <h2 className="text-2xl font-bold mb-6 text-gray-900 border-b-2 border-orange-500 pb-2 inline-block">
+          <section className="mt-10">
+            <h2 className="text-2xl font-bold mb-8 text-gray-900 border-b-2 border-orange-500 pb-2 inline-block">
               調理手順
             </h2>
             
-            <div className="space-y-6">
+            <div className="space-y-8">
               {recipe.steps.map((step) => (
-                <div key={step.step_number} className="flex gap-4 group">
-                  {/* ステップ番号 */}
-                  <div className="shrink-0">
-                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 text-white font-bold text-lg shadow-md">
+                <div key={step.step_number} className="flex gap-4 md:gap-6 group">
+                  <div className="flex flex-col items-center">
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 text-white font-bold text-lg shadow-sm z-10">
                       {step.step_number}
                     </span>
+                    <div className="w-0.5 h-full bg-gray-100 mt-2 group-last:hidden"></div>
                   </div>
 
-                  {/* 手順詳細 */}
-                  <div className="flex-1 pt-1">
-                    <p className="text-gray-800 leading-7 text-base mb-2">
+                  <div className="flex-1 pb-6">
+                    <p className="text-gray-800 leading-relaxed text-md md:text-lg mb-4 font-medium">
                       {step.description}
                     </p>
 
-                    {/* 再生ボタン (タイムスタンプがある場合) */}
+                    {/* コツ・ポイント：吹き出し風カード */}
+                    {step.tips?.length > 0 && (
+                      <div className="mb-4 space-y-3">
+                        {step.tips.map((tip, idx) => (
+                          <div 
+                            key={idx} 
+                            className="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-xl shadow-sm"
+                          >
+                            <div className="flex items-start gap-3">
+                              <FaLightbulb className="text-orange-500 mt-1 shrink-0 text-sm" />
+                              <div className="flex-1">
+                                <p className="text-sm text-orange-900 leading-6 italic">
+                                  {tip.description}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* 手順再生ボタン：動画連動の核となるUI */}
                     {step.start_time_in_seconds !== null && (
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => playerRef.current?.seekTo(step.start_time_in_seconds!)}
-                        className="text-orange-600 border-orange-200 hover:bg-orange-50 hover:text-orange-700 h-8 gap-1.5"
+                        className="mt-2 rounded-full border-orange-200 text-orange-600 hover:bg-orange-500 hover:text-white transition-all duration-300 shadow-sm gap-2 px-4"
                       >
                         <FaPlay className="text-[10px]" />
-                        <span className="text-xs font-bold">
-                          {formatTime(step.start_time_in_seconds)} から再生
+                        <span className="text-xs font-bold tracking-wider">
+                          {formatTime(step.start_time_in_seconds)} から動画を見る
                         </span>
                       </Button>
                     )}
@@ -219,27 +241,35 @@ export function RecipeDetailPage() {
             </div>
           </section>
 
-          {/* コツ・ポイント */}
-          {recipe.tips.length > 0 && (
-            <section className="bg-yellow-50 rounded-xl p-6 border border-yellow-100">
-              <h3 className="text-lg font-bold text-yellow-800 mb-4 flex items-center gap-2">
-                <FaLightbulb /> コツ・ポイント
-              </h3>
-              <ul className="space-y-3">
-                {recipe.tips.map((tip, idx) => (
-                  <li key={idx} className="flex gap-2 text-sm text-gray-700">
-                    <span className="text-yellow-500 mt-1">●</span>
-                    <span>
-                      {tip.description}
-                      {tip.related_step_number && (
-                        <span className="ml-2 text-xs text-gray-400">
-                          (工程{tip.related_step_number}参照)
-                        </span>
-                      )}
-                    </span>
-                  </li>
+          {/* レシピ全体のコツ・ポイント（General Tips） */}
+          {generalTips.length > 0 && (
+            <section className="mt-10 bg-amber-50 rounded-2xl p-8 border border-amber-100 shadow-sm">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-amber-400 p-2 rounded-lg">
+                  <FaLightbulb className="text-white text-xl" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-amber-900">Chef's Advice</h3>
+                  <p className="text-xs text-amber-700/70 font-medium">美味しく作るための最終チェック</p>
+                </div>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2"> {/* 2カラムにすると情報が整理されて見やすい */}
+                {generalTips.map((tip, idx) => (
+                  <div key={idx} className="bg-white/60 p-4 rounded-xl border border-amber-200/50 flex gap-3 group">
+                    <div className="text-amber-500 mt-1 shrink-0">
+                      <svg width="12" height="12" viewBox="0 0 12 12">
+                        <circle cx="6" cy="6" r="4" fill="currentColor" />
+                      </svg>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm text-gray-800 leading-relaxed">
+                        {tip.description}
+                      </p>
+                    </div>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </section>
           )}
         </div>
