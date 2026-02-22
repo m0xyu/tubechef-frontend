@@ -64,7 +64,6 @@ export interface Dish {
 interface VideoBase {
   video_id: string;    // YouTube Video ID (e.g., dQw4w9WgXcQ)
   title: string;
-  description: string | null;
   thumbnail_url: string | null;
   duration: number | null; // 秒数
   published_at: string;    // ISO8601 Date String
@@ -92,13 +91,11 @@ export interface VideoPreview extends VideoBase {
  */
 export interface VideoDetail extends VideoBase {
   id: number;
-  is_saved: true;
   status: RecipeGenerationStatus;
   channel: Channel; 
   view_count: number | null;
   like_count: number | null;
   comment_count: number | null;
-  topic_categories: Array<string> | null
 }
 
 /**

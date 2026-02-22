@@ -18,6 +18,8 @@ export const LibraryList = ({
   onGenerate, 
   onDelete 
 }: LibraryListProps) => {
+
+  console.log(videos);
   
   // 初回ロード中
   if (isLoading && videos.length === 0) {
@@ -52,5 +54,7 @@ export const LibraryList = ({
         </div>
       ))}
     </div>
+
+    //ページネーションのUIも追加する
   );
 };
